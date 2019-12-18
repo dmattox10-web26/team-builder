@@ -1,6 +1,7 @@
 import React from 'react'
 import { Container, Button } from 'reactstrap'
 import { useHistory } from 'react-router-dom'
+import cuid from 'cuid'
 
 import MemberCard from './Card'
 
@@ -11,7 +12,7 @@ const Display = (props) => {
     return (
         <Container>
             {teamMembers.map((teamMember, index) => 
-                <MemberCard teamMember={ teamMember } id={ index } />
+                <MemberCard teamMember={ teamMember } id={ index } key={cuid()}/>
             )}
             <Button onClick={() => history.push('/add')}>Add</Button>
         </Container>
