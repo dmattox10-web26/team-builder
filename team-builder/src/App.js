@@ -4,7 +4,14 @@ import { Switch, Route } from 'react-router-dom'
 import Display from './components/Display'
 import Add from './components/Add'
 function App() {
-  const [teamMembers, updateTeam] = useState([])
+  const [teamMembers, updateTeam] = useState([
+    {
+      name: 'Daniel Mattox',
+      role: 'Software Engineer',
+      email: 'dmattox10@gmail.com',
+      id: 0
+    },
+  ])
 
   const addTeamMember = (teamMember) => {
     updateTeam(oldTeam => [...oldTeam, teamMember])
@@ -18,13 +25,13 @@ function App() {
     <div className="App">
       <Switch>
         <Route exact path='/'>
-          <Display teamMembers={ teamMembers } />
+          <Display team={ teamMembers } />
         </Route>
-        <Route path='/add'>
+        <Route exact path='/add'>
           <Add addTeamMember={ addTeamMember } />
         </Route>
-        <Route path='/edit/:id'>
-          <Add teamMembers={teamMembers} addTeamMember={ editTeamMember } />
+        <Route exact path='/edit:id'>
+          <Add team={ teamMembers } />
         </Route>
       </Switch>
     </div>

@@ -6,7 +6,8 @@ import MemberCard from './Card'
 
 const Display = (props) => {
     const history = useHistory()
-    const { teamMembers } = props
+    console.log(props)
+    const teamMembers = props.team
     return (
         <Container>
             {teamMembers.map((teamMember, index) => 

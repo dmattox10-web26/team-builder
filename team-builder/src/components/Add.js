@@ -1,63 +1,58 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Card, CardText, CardBody,
-    CardTitle, CardSubtitle, Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap'
-import { Link, useHistory, useParams } from 'react-router-dom'
+import { Container, Card, CardBody,
+    CardTitle, Button, Form, FormGroup, Label, Input } from 'reactstrap'
+import { useHistory, useParams } from 'react-router-dom'
+import { useInput } from '../hooks/input-hook'
 
 const Add = (props) => {
     const { id } = useParams() || null
     const { teamMembers } = props
     const history = useHistory()
-    const [teamMember, updateTeamMember] = useState({id: id})
-    const handleInputChange = (event) => {
-        event.persist();
-        updateTeamMember(teamMember => ({...teamMember, [event.target.name]: event.target.value}));
-      }
+    const [teamMember, updateTeamMember] = useState({...teamMembers})
+    const { value:name, bind:bindName } = useInput('')
+    const { value:role, bind:bindRole } = useInput('')
+    const { value:email, bind:bindEmail } = useInput('')
+    const handleSubmit = (event) => {
+        event.preventDefault()
+        
+        props.addTeamMember(teamMember)
+        history.push('/')
+    }
     useEffect(() => {
-        if(typeof id === 'string') {
-            try {
-                updateTeamMember(teamMembers[id])
-            }
-            catch (e) {
-                console.log(e)
-            }
-        }
-    }, [teamMember])
+        updateTeamMember({
+            name: name,
+            role: role,
+            email: email,
+            id: id
+        })
+    }, [name, role, email])
     return (
         <Container>
             <Card>
                 <CardBody>
                     <CardTitle>Add/Edit Team Member</CardTitle>
-                    <Form>
+                    <Form onSubmit={handleSubmit}>
                         <FormGroup>
                             <Label for='name'>Name</Label>
-                            <Input type='name'
-                                    name='name'
-                                    id='name'
-                                    placeholder={props.name}
-                                    value={teamMember.name}
+                            <Input type='text'
+                                    {...bindName}
                             />
                         </FormGroup>
                         <FormGroup>
                             <Label for='role'>Role</Label>
-                            <Input type='role'
-                                    name='role'
-                                    id='role'
-                                    placeholder={props.role}
-                                    value={teamMember.Role}
+                            <Input type='text'
+                                    {...bindRole}
                             />
                         </FormGroup>
                         <FormGroup>
                             <Label for='email'>Email</Label>
-                            <Input type='email'
-                                    name='email'
-                                    id='email'
-                                    placeholder={props.email}
-                                    value={teamMember.Email}
+                            <Input type='text'
+                                    {...bindEmail}
                             />
                         </FormGroup>
+                        <Button type='submit'>Done</Button>
                     </Form>
-                    <Button onClick={props.addTeamMember(teamMember)}>Add/Edit</Button>
-                    <Button onClick={() => history.push('/')}>Home</Button>
+                    
                 </CardBody>
             </Card>
         </Container>
